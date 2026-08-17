@@ -1,1 +1,3288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
+<title>NFN Downloader - Free Online Video Downloader</title>
+
+<meta name="description"
+content="NFN Downloader lets you download supported online videos and convert media easily.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:#fff;
+    color:#222;
+    overflow-x:hidden;
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+:root{
+    --green:#70d400;
+    --green-dark:#52ad00;
+    --green-light:#f0fae8;
+    --border:#e6e6e6;
+    --text:#282828;
+    --muted:#777;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+    height:72px;
+    border-bottom:1px solid #e9e9e9;
+    background:#fff;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.header-inner{
+    max-width:1050px;
+    height:100%;
+    margin:auto;
+    padding:0 20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:800;
+    letter-spacing:-1.8px;
+    color:#20252b;
+}
+
+.logo span{
+    color:var(--green-dark);
+}
+
+.menu-button{
+    width:44px;
+    height:44px;
+    border:0;
+    background:transparent;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+}
+
+.menu-button span{
+    width:28px;
+    height:3px;
+    border-radius:4px;
+    background:#333;
+    display:block;
+}
+
+
+/* =========================================================
+   SIDE MENU
+========================================================= */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.38);
+    z-index:1999;
+    display:none;
+}
+
+.overlay.active{
+    display:block;
+}
+
+.side-menu{
+    position:fixed;
+    top:0;
+    left:-310px;
+
+    width:290px;
+    height:100vh;
+
+    background:#fff;
+
+    z-index:2000;
+
+    box-shadow:8px 0 30px rgba(0,0,0,.15);
+
+    transition:.3s ease;
+
+    overflow-y:auto;
+}
+
+.side-menu.active{
+    left:0;
+}
+
+.menu-header{
+    height:72px;
+    border-bottom:1px solid #eee;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 20px;
+}
+
+.menu-title{
+    font-size:20px;
+    font-weight:800;
+}
+
+.close-menu{
+    border:0;
+    background:none;
+    font-size:30px;
+    color:#555;
+}
+
+.menu-section{
+    padding:20px 22px 8px;
+
+    color:#888;
+
+    font-size:11px;
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+.menu-links{
+    padding:12px 0;
+}
+
+.menu-links a{
+    display:block;
+
+    padding:17px 22px;
+
+    font-size:15px;
+
+    color:#333;
+
+    border-bottom:1px solid #f4f4f4;
+}
+
+.menu-links a:hover{
+    background:#f5fbeF;
+    color:var(--green-dark);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    max-width:850px;
+
+    margin:auto;
+
+    text-align:center;
+
+    padding:42px 18px 25px;
+}
+
+
+/* =========================================================
+   TINY GREEN DOWNLOAD LOGO
+========================================================= */
+
+.download-icon{
+    width:42px;
+    height:42px;
+
+    margin:0 auto 18px;
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.arrow{
+    width:21px;
+    height:28px;
+
+    position:relative;
+
+    background:#78d900;
+
+    border-radius:2px 2px 0 0;
+
+    box-shadow:
+        inset 2px 0 rgba(255,255,255,.18),
+        inset -2px 0 rgba(0,0,0,.08);
+}
+
+.arrow:before{
+    content:"";
+
+    position:absolute;
+
+    left:-7px;
+    bottom:-9px;
+
+    width:0;
+    height:0;
+
+    border-left:17px solid transparent;
+    border-right:17px solid transparent;
+    border-top:19px solid #69c900;
+}
+
+.arrow:after{
+    content:"";
+
+    position:absolute;
+
+    left:-10px;
+    top:1px;
+
+    width:10px;
+    height:15px;
+
+    border-right:4px solid #8bea12;
+    border-left:4px solid #8bea12;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.hero h1{
+    font-size:36px;
+    line-height:1.2;
+
+    color:#333;
+
+    font-weight:800;
+
+    margin-bottom:28px;
+}
+
+.hero h1 span{
+    color:#68c700;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-wrapper{
+    width:100%;
+
+    display:flex;
+
+    background:var(--green);
+
+    padding:7px;
+
+    border-radius:8px;
+
+    box-shadow:0 4px 14px rgba(80,150,0,.12);
+}
+
+.search-input-box{
+    position:relative;
+    flex:1;
+    min-width:0;
+}
+
+.search-input{
+    width:100%;
+
+    height:62px;
+
+    border:0;
+    outline:0;
+
+    background:#fff;
+
+    padding:0 48px 0 17px;
+
+    font-size:17px;
+
+    color:#222;
+
+    border-radius:3px;
+}
+
+.search-input::placeholder{
+    color:#888;
+}
+
+
+/* =========================================================
+   CLEAR X BUTTON
+========================================================= */
+
+.clear-input{
+    position:absolute;
+
+    right:12px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:24px;
+    height:24px;
+
+    border-radius:50%;
+
+    border:1px solid #aaa;
+
+    background:#fff;
+
+    color:#777;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:17px;
+    font-weight:500;
+
+    line-height:1;
+
+    padding:0;
+
+    z-index:5;
+}
+
+.clear-input:hover{
+    background:#f1f1f1;
+    color:#333;
+    border-color:#777;
+}
+
+.clear-input.show{
+    display:flex;
+}
+
+
+.search-submit{
+    width:76px;
+
+    border:0;
+
+    background:var(--green);
+
+    color:#477d00;
+
+    font-size:42px;
+
+    font-weight:700;
+}
+
+.search-submit:hover{
+    color:#285700;
+}
+
+
+/* =========================================================
+   ACCEPT
+========================================================= */
+
+.accept-text{
+    margin:15px auto 0;
+
+    max-width:650px;
+
+    font-size:14px;
+
+    line-height:1.7;
+
+    color:#555;
+}
+
+.accept-text a{
+    color:#277a98;
+    text-decoration:underline;
+}
+
+
+/* =========================================================
+   TRUST
+========================================================= */
+
+.trust{
+    text-align:center;
+
+    margin:42px auto 20px;
+}
+
+.security{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    font-size:14px;
+
+    color:#333;
+}
+
+.security-icon{
+    width:29px;
+    height:29px;
+
+    border-radius:50%;
+
+    border:4px solid #f5d400;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:13px;
+    font-weight:800;
+}
+
+.rating{
+    margin-top:27px;
+
+    font-size:15px;
+
+    color:#555;
+}
+
+.stars{
+    color:#eaaa1c;
+
+    font-size:24px;
+
+    letter-spacing:2px;
+}
+
+.rating strong{
+    color:#333;
+    font-size:18px;
+}
+
+
+/* =========================================================
+   PROCESSING
+========================================================= */
+
+.processing{
+    max-width:850px;
+
+    margin:20px auto;
+
+    padding:0 18px;
+
+    display:none;
+}
+
+.processing.active{
+    display:block;
+}
+
+.processing-box{
+    background:#f4faee;
+
+    border:1px solid #d8ebc9;
+
+    border-radius:8px;
+
+    padding:18px;
+}
+
+.processing-title{
+    font-size:15px;
+
+    font-weight:700;
+
+    color:#333;
+}
+
+.processing-text{
+    font-size:12px;
+
+    color:#777;
+
+    margin-top:6px;
+}
+
+
+/* MOVING DOTS */
+
+.dots{
+    margin-top:13px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#6e9eaa;
+
+    animation:dotMove 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(2){
+    animation-delay:.15s;
+}
+
+.dot:nth-child(3){
+    animation-delay:.30s;
+}
+
+.dot:nth-child(4){
+    animation-delay:.45s;
+}
+
+@keyframes dotMove{
+
+    0%,60%,100%{
+        transform:translateX(0);
+        opacity:.35;
+    }
+
+    30%{
+        transform:translateX(7px);
+        opacity:1;
+    }
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.result{
+    max-width:850px;
+
+    margin:25px auto;
+
+    padding:0 18px;
+
+    display:none;
+}
+
+.result.active{
+    display:block;
+}
+
+
+/* screenshot-style result */
+
+.video-result{
+    width:100%;
+
+    border:1px solid #ddd;
+
+    background:#fff;
+
+    overflow:hidden;
+
+    box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+
+
+/* RESULT TOP */
+
+.video-heading{
+    text-align:center;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    padding:20px 10px 75px;
+
+    color:#333;
+}
+
+
+/* PREVIEW */
+
+.video-preview{
+    position:relative;
+
+    width:100%;
+
+    height:330px;
+
+    background:#dfe7ea;
+
+    overflow:hidden;
+}
+
+.video-preview img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:none;
+}
+
+.video-preview.has-image img{
+    display:block;
+}
+
+.preview-placeholder{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dce5e7,
+            #aebec3
+        );
+
+    color:#777;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   DOWNLOAD CONTROL
+========================================================= */
+
+.download-control{
+    position:absolute;
+
+    top:-41px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    display:flex;
+
+    height:64px;
+
+    border-radius:8px;
+
+    overflow:visible;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.16);
+
+    z-index:10;
+}
+
+.download-main{
+    height:64px;
+
+    min-width:125px;
+
+    border:0;
+
+    background:#08a935;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    border-radius:8px 0 0 8px;
+}
+
+.quality-wrap{
+    position:relative;
+
+    height:64px;
+}
+
+.quality-button{
+    height:64px;
+
+    min-width:235px;
+
+    border:0;
+
+    border-left:1px solid rgba(0,0,0,.12);
+
+    background:#fff;
+
+    color:#119d38;
+
+    padding:0 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:18px;
+
+    font-size:20px;
+
+    border-radius:0 8px 8px 0;
+}
+
+.quality-arrow{
+    font-size:27px;
+
+    color:#0e9c35;
+
+    transition:.2s;
+}
+
+.quality-button.open .quality-arrow{
+    transform:rotate(180deg);
+}
+
+
+/* QUALITY MENU */
+
+.quality-menu{
+    position:absolute;
+
+    top:69px;
+
+    right:0;
+
+    width:235px;
+
+    background:white;
+
+    border:3px solid #08a935;
+
+    border-radius:7px;
+
+    overflow:hidden;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.18);
+
+    display:none;
+
+    z-index:50;
+}
+
+.quality-menu.active{
+    display:block;
+}
+
+.quality-option{
+    width:100%;
+
+    height:57px;
+
+    border:0;
+
+    background:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    color:#149e3c;
+
+    font-size:18px;
+}
+
+.quality-option:hover{
+    background:#f0fae9;
+}
+
+.quality-option span:last-child{
+    color:#999;
+}
+
+
+/* VIDEO TITLE */
+
+.video-title{
+    padding:42px 25px 24px;
+
+    font-size:20px;
+
+    color:#666;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    border-bottom:1px solid #eee;
+}
+
+
+/* DOWNLOAD STATUS */
+
+.download-status{
+    display:none;
+
+    padding:15px 20px;
+
+    background:#eaf8df;
+
+    color:#418c18;
+
+    font-size:13px;
+
+    text-align:center;
+}
+
+.download-status.active{
+    display:block;
+}
+
+
+/* =========================================================
+   RESOURCES
+========================================================= */
+
+.resources{
+    max-width:850px;
+
+    margin:65px auto;
+
+    padding:0 18px;
+}
+
+.section-title{
+    font-size:29px;
+
+    font-weight:800;
+
+    margin-bottom:25px;
+
+    color:#292d31;
+}
+
+.section-subtitle{
+    color:#777;
+
+    font-size:14px;
+
+    margin-top:-17px;
+
+    margin-bottom:25px;
+}
+
+
+/* POPULAR */
+
+.popular-list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+}
+
+.resource-card{
+    min-height:80px;
+
+    border-radius:10px;
+
+    background:#eef9e8;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:13px 22px;
+
+    gap:18px;
+
+    transition:.2s;
+
+    border:1px solid transparent;
+}
+
+.resource-card:hover{
+    border-color:#c8e8b6;
+
+    transform:translateY(-1px);
+}
+
+.resource-icon{
+    width:52px;
+    height:52px;
+
+    border-radius:11px;
+
+    background:white;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:25px;
+
+    font-weight:800;
+
+    flex-shrink:0;
+}
+
+.resource-name{
+    font-size:17px;
+
+    font-weight:500;
+}
+
+.resource-domain{
+    font-size:11px;
+
+    color:#777;
+
+    margin-top:4px;
+}
+
+
+/* ALL RESOURCES */
+
+.all-title{
+    margin-top:60px;
+}
+
+.all-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px 35px;
+}
+
+.all-resource{
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:12px 8px;
+
+    border-bottom:1px solid #f0f0f0;
+
+    min-height:67px;
+}
+
+.all-icon{
+    width:43px;
+    height:43px;
+
+    border-radius:9px;
+
+    background:#edf1f4;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    flex-shrink:0;
+}
+
+.all-name{
+    font-size:15px;
+
+    color:#333;
+}
+
+.all-description{
+    font-size:10px;
+
+    color:#999;
+
+    margin-top:3px;
+}
+
+
+/* =========================================================
+   CONVERTERS
+========================================================= */
+
+.converter-grid{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:10px 25px;
+}
+
+.converter{
+    min-height:64px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    border-bottom:1px solid #eee;
+}
+
+.converter-icon{
+    width:48px;
+    height:48px;
+
+    border-radius:9px;
+
+    background:#263644;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    flex-shrink:0;
+}
+
+.converter-name{
+    font-size:14px;
+
+    color:#333;
+}
+
+
+/* =========================================================
+   HOW TO
+========================================================= */
+
+.howto{
+    background:#f7faf5;
+
+    padding:60px 18px;
+
+    margin-top:60px;
+}
+
+.howto-inner{
+    max-width:850px;
+
+    margin:auto;
+}
+
+.steps{
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:15px;
+}
+
+.step{
+    background:white;
+
+    border:1px solid #e7eee2;
+
+    border-radius:10px;
+
+    padding:22px;
+}
+
+.step-number{
+    width:35px;
+    height:35px;
+
+    border-radius:50%;
+
+    background:#6bd000;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-weight:800;
+
+    margin-bottom:15px;
+}
+
+.step h3{
+    font-size:14px;
+}
+
+.step p{
+    font-size:12px;
+
+    color:#777;
+
+    line-height:1.7;
+
+    margin-top:8px;
+}
+
+
+/* =========================================================
+   ADSTERRA AREA
+========================================================= */
+
+.ad-container{
+    max-width:850px;
+
+    margin:35px auto;
+
+    padding:0 18px;
+
+    text-align:center;
+}
+
+.ad-label{
+    font-size:9px;
+
+    color:#aaa;
+
+    margin-bottom:7px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    border-top:1px solid #eee;
+
+    padding:35px 20px;
+
+    text-align:center;
+
+    color:#888;
+
+    font-size:12px;
+}
+
+.footer-logo{
+    font-size:22px;
+
+    font-weight:800;
+
+    color:#333;
+
+    margin-bottom:8px;
+}
+
+.footer-logo span{
+    color:#69c900;
+}
+
+.footer-links{
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+    margin-top:16px;
+}
+
+.footer-links a{
+    color:#666;
+}
+
+.footer-links a:hover{
+    color:#5caf00;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:22px;
+
+    transform:translate(-50%,25px);
+
+    background:#222;
+
+    color:white;
+
+    padding:12px 17px;
+
+    border-radius:7px;
+
+    font-size:12px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
+
+    z-index:3000;
+
+    max-width:90%;
+
+    text-align:center;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:translate(-50%,0);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:650px){
+
+    .header{
+        height:65px;
+    }
+
+    .logo{
+        font-size:27px;
+    }
+
+    .hero{
+        padding-top:35px;
+    }
+
+    .download-icon{
+        width:42px;
+        height:42px;
+
+        transform:scale(.82);
+
+        margin-bottom:3px;
+    }
+
+    .hero h1{
+        font-size:29px;
+
+        margin-bottom:22px;
+    }
+
+    .search-wrapper{
+        padding:6px;
+    }
+
+    .search-input{
+        height:58px;
+
+        font-size:15px;
+    }
+
+    .clear-input{
+        right:10px;
+        width:23px;
+        height:23px;
+        font-size:16px;
+    }
+
+    .search-submit{
+        width:65px;
+
+        font-size:34px;
+    }
+
+    .accept-text{
+        font-size:12px;
+    }
+
+    .trust{
+        margin-top:35px;
+    }
+
+    .rating{
+        margin-top:22px;
+    }
+
+    .resources{
+        margin-top:50px;
+    }
+
+    .section-title{
+        font-size:25px;
+    }
+
+    .resource-card{
+        min-height:74px;
+
+        padding:11px 15px;
+    }
+
+    .resource-icon{
+        width:45px;
+        height:45px;
+
+        font-size:21px;
+    }
+
+    .resource-name{
+        font-size:15px;
+    }
+
+    .all-grid{
+        grid-template-columns:1fr;
+
+        gap:0;
+    }
+
+    .converter-grid{
+        grid-template-columns:1fr;
+    }
+
+    .steps{
+        grid-template-columns:1fr;
+    }
+
+    /* RESULT MOBILE */
+
+    .video-heading{
+        font-size:19px;
+
+        padding-bottom:70px;
+    }
+
+    .video-preview{
+        height:250px;
+    }
+
+    .download-control{
+        height:57px;
+
+        top:-36px;
+    }
+
+    .download-main{
+        height:57px;
+
+        min-width:105px;
+
+        font-size:17px;
+    }
+
+    .quality-button{
+        height:57px;
+
+        min-width:165px;
+
+        font-size:16px;
+
+        padding:0 12px;
+    }
+
+    .quality-menu{
+        width:165px;
+    }
+
+    .quality-option{
+        height:51px;
+
+        padding:0 15px;
+
+        font-size:15px;
+    }
+
+    .video-title{
+        padding:38px 15px 20px;
+
+        font-size:16px;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .search-input{
+        font-size:13px;
+    }
+
+    .search-submit{
+        width:57px;
+    }
+
+    .download-main{
+        min-width:92px;
+    }
+
+    .quality-button{
+        min-width:145px;
+
+        font-size:14px;
+    }
+
+    .quality-menu{
+        width:145px;
+    }
+
+}
+
+
+/* =========================================================
+   LOADING OVERLAY INSIDE PREVIEW
+========================================================= */
+
+.preview-loading{
+    position:absolute;
+
+    inset:0;
+
+    background:rgba(255,255,255,.82);
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    z-index:5;
+}
+
+.preview-loading.active{
+    display:flex;
+}
+
+.loading-dots{
+    display:flex;
+
+    gap:6px;
+}
+
+.loading-dots span{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:#568da0;
+
+    animation:loadingDot 1.1s infinite;
+}
+
+.loading-dots span:nth-child(2){
+    animation-delay:.15s;
+}
+
+.loading-dots span:nth-child(3){
+    animation-delay:.3s;
+}
+
+@keyframes loadingDot{
+
+    0%,100%{
+        transform:translateY(0);
+        opacity:.35;
+    }
+
+    50%{
+        transform:translateY(-7px);
+        opacity:1;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     SIDE MENU
+========================================================= -->
+
+<div
+    id="overlay"
+    class="overlay"
+    onclick="closeMenu()"
+></div>
+
+
+<aside
+    id="sideMenu"
+    class="side-menu"
+>
+
+    <div class="menu-header">
+
+        <div class="menu-title">
+            NFN Downloader
+        </div>
+
+        <button
+            class="close-menu"
+            onclick="closeMenu()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="menu-section">
+        Downloaders
+    </div>
+
+    <div class="menu-links">
+
+        <a href="#home" onclick="closeMenu()">
+            🏠 Home
+        </a>
+
+        <a href="#youtube" onclick="closeMenu()">
+            ▶ YouTube Downloader
+        </a>
+
+        <a href="#facebook" onclick="closeMenu()">
+            f Facebook Downloader
+        </a>
+
+        <a href="#instagram" onclick="closeMenu()">
+            ◎ Instagram Downloader
+        </a>
+
+        <a href="#tiktok" onclick="closeMenu()">
+            ♪ TikTok Downloader
+        </a>
+
+    </div>
+
+
+    <div class="menu-section">
+        Resources
+    </div>
+
+    <div class="menu-links">
+
+        <a href="#resources" onclick="closeMenu()">
+            All Resources
+        </a>
+
+        <a href="#converters" onclick="closeMenu()">
+            Video Converters
+        </a>
+
+        <a href="#howto" onclick="closeMenu()">
+            How to use
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <a
+            href="#home"
+            class="logo"
+        >
+            NFN<span>.</span>
+        </a>
+
+
+        <button
+            class="menu-button"
+            onclick="openMenu()"
+            aria-label="Open menu"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main id="home">
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+
+    <!-- TINY GREEN DOWNLOAD LOGO -->
+
+    <div class="download-icon">
+
+        <div class="arrow"></div>
+
+    </div>
+
+
+    <h1>
+
+        Free Online
+        <span>Video Downloader</span>
+
+    </h1>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-wrapper">
+
+        <div class="search-input-box">
+
+            <input
+                id="urlInput"
+                class="search-input"
+                type="url"
+                placeholder="Paste video link here..."
+                autocomplete="off"
+            >
+
+
+            <!-- SMALL CLEAR BUTTON -->
+
+            <button
+                id="clearInput"
+                class="clear-input"
+                type="button"
+                onclick="clearInputField()"
+                aria-label="Clear link"
+                title="Clear"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <button
+            id="searchButton"
+            class="search-submit"
+            onclick="startDownload()"
+            aria-label="Download"
+        >
+
+            ↓
+
+        </button>
+
+    </div>
+
+
+    <div class="accept-text">
+
+        By using our service you accept our
+
+        <a href="#">
+            Terms of Service
+        </a>
+
+        and
+
+        <a href="#">
+            Privacy Policy
+        </a>.
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRUST
+========================================================= -->
+
+<section class="trust">
+
+    <div class="security">
+
+        <div class="security-icon">
+            ✓
+        </div>
+
+        <span>
+            NFN Secure Web
+        </span>
+
+    </div>
+
+
+    <div class="rating">
+
+        <span class="stars">
+            ★★★★★
+        </span>
+
+        <strong>
+            4.8
+        </strong>
+
+        /5
+
+        <span>
+            · 12,000+ users
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ADSTERRA
+========================================================= -->
+
+<div class="ad-container">
+
+    <div class="ad-label">
+        Advertisement
+    </div>
+
+    <!-- PASTE YOUR ADSTERRA CODE BELOW THIS LINE -->
+
+</div>
+
+
+<!-- =========================================================
+     PROCESSING
+========================================================= -->
+
+<section
+    id="processing"
+    class="processing"
+>
+
+    <div class="processing-box">
+
+        <div class="processing-title">
+            Processing the link to download. Stay on the page.
+        </div>
+
+        <div
+            id="processingText"
+            class="processing-text"
+        >
+            Detecting video...
+        </div>
+
+
+        <div class="dots">
+
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     RESULT
+========================================================= -->
+
+<section
+    id="result"
+    class="result"
+>
+
+    <div class="video-result">
+
+
+        <div class="video-heading">
+
+            Your video:
+
+        </div>
+
+
+        <div
+            id="videoPreview"
+            class="video-preview"
+        >
+
+            <div
+                id="previewPlaceholder"
+                class="preview-placeholder"
+            >
+                Video preview
+            </div>
+
+
+            <img
+                id="videoThumbnail"
+                alt="Video preview"
+            >
+
+
+            <div
+                id="previewLoading"
+                class="preview-loading"
+            >
+
+                <div class="loading-dots">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+                <small>
+                    Preparing video...
+                </small>
+
+            </div>
+
+
+            <!-- DOWNLOAD CONTROL -->
+
+            <div class="download-control">
+
+
+                <button
+                    id="downloadButton"
+                    class="download-main"
+                    onclick="downloadSelected()"
+                >
+                    Download
+                </button>
+
+
+                <div class="quality-wrap">
+
+
+                    <button
+                        id="qualityButton"
+                        class="quality-button"
+                        onclick="toggleQuality()"
+                    >
+
+                        <span id="selectedFormat">
+                            MP4&nbsp;&nbsp;1080
+                        </span>
+
+                        <span class="quality-arrow">
+                           ⌄
+                        </span>
+
+                    </button>
+
+
+                    <div
+                        id="qualityMenu"
+                        class="quality-menu"
+                    >
+
+                        <button
+                            class="quality-option"
+                            onclick="selectQuality('MP4','1080')"
+                        >
+
+                            <span>MP4</span>
+                            <span>1080</span>
+
+                        </button>
+
+
+                        <button
+                            class="quality-option"
+                            onclick="selectQuality('MP4','720')"
+                        >
+
+                            <span>MP4</span>
+                            <span>720</span>
+
+                        </button>
+
+
+                        <button
+                            class="quality-option"
+                            onclick="selectQuality('MP4','576')"
+                        >
+
+                            <span>MP4</span>
+                            <span>576</span>
+
+                        </button>
+
+
+                        <button
+                            class="quality-option"
+                            onclick="selectQuality('MP3','Audio')"
+                        >
+
+                            <span>MP3</span>
+                            <span>Audio</span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="videoTitle"
+            class="video-title"
+        >
+            Video
+        </div>
+
+
+        <div
+            id="downloadStatus"
+            class="download-status"
+        ></div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SECOND ADSTERRA
+========================================================= -->
+
+<div class="ad-container">
+
+    <div class="ad-label">
+        Advertisement
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     POPULAR RESOURCES
+========================================================= -->
+
+<section
+    id="resources"
+    class="resources"
+>
+
+
+    <h2 class="section-title">
+        Popular resources
+    </h2>
+
+
+    <p class="section-subtitle">
+        Quickly access NFN downloaders.
+    </p>
+
+
+    <div class="popular-list">
+
+
+        <a
+            href="#"
+            class="resource-card"
+            id="facebook"
+        >
+
+            <div class="resource-icon">
+                f
+            </div>
+
+            <div>
+
+                <div class="resource-name">
+                    Facebook
+                </div>
+
+                <div class="resource-domain">
+                    facebook.com
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="#"
+            class="resource-card"
+            id="instagram"
+        >
+
+            <div class="resource-icon">
+                ◎
+            </div>
+
+            <div>
+
+                <div class="resource-name">
+                    Instagram
+                </div>
+
+                <div class="resource-domain">
+                    instagram.com
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="#"
+            class="resource-card"
+            id="youtube"
+        >
+
+            <div class="resource-icon">
+                ▶
+            </div>
+
+            <div>
+
+                <div class="resource-name">
+                    YouTube
+                </div>
+
+                <div class="resource-domain">
+                    youtube.com
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="#"
+            class="resource-card"
+            id="tiktok"
+        >
+
+            <div class="resource-icon">
+                ♪
+            </div>
+
+            <div>
+
+                <div class="resource-name">
+                    TikTok
+                </div>
+
+                <div class="resource-domain">
+                    tiktok.com
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <!-- ALL RESOURCES -->
+
+    <h2 class="section-title all-title">
+        All resources
+    </h2>
+
+
+    <div class="all-grid">
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">d</div>
+            <div>
+                <div class="all-name">dailymotion.com</div>
+                <div class="all-description">Dailymotion video downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">V</div>
+            <div>
+                <div class="all-name">vimeo.com</div>
+                <div class="all-description">Vimeo video downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">VK</div>
+            <div>
+                <div class="all-name">vk.com</div>
+                <div class="all-description">VK downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">♪</div>
+            <div>
+                <div class="all-name">TT</div>
+                <div class="all-description">TikTok downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">R</div>
+            <div>
+                <div class="all-name">reddit.com</div>
+                <div class="all-description">Reddit video downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">@</div>
+            <div>
+                <div class="all-name">Threads</div>
+                <div class="all-description">Threads downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">小</div>
+            <div>
+                <div class="all-name">xiaohongshu.com</div>
+                <div class="all-description">Xiaohongshu downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">P</div>
+            <div>
+                <div class="all-name">pinterest.com</div>
+                <div class="all-description">Pinterest downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">X</div>
+            <div>
+                <div class="all-name">x.com</div>
+                <div class="all-description">X video downloader</div>
+            </div>
+        </a>
+
+
+        <a href="#" class="all-resource">
+            <div class="all-icon">▶</div>
+            <div>
+                <div class="all-name">youtube.com</div>
+                <div class="all-description">YouTube downloader</div>
+            </div>
+        </a>
+
+    </div>
+
+
+    <!-- CONVERTERS -->
+
+    <h2
+        id="converters"
+        class="section-title all-title"
+    >
+        Video converters
+    </h2>
+
+
+    <div class="converter-grid">
+
+
+        <a href="#" class="converter">
+            <div class="converter-icon">MP4</div>
+            <div class="converter-name">MP4 Converter</div>
+        </a>
+
+
+        <a href="#" class="converter">
+            <div class="converter-icon">MP3</div>
+            <div class="converter-name">MP4 to MP3</div>
+        </a>
+
+
+        <a href="#" class="converter">
+            <div class="converter-icon">MOV</div>
+            <div class="converter-name">MOV to MP4</div>
+        </a>
+
+
+        <a href="#" class="converter">
+            <div class="converter-icon">GIF</div>
+            <div class="converter-name">MP4 to GIF</div>
+        </a>
+
+
+        <a href="#" class="converter">
+            <div class="converter-icon">MKV</div>
+            <div class="converter-name">MKV to MP4</div>
+        </a>
+
+
+        <a href="#" class="converter">
+            <div class="converter-icon">WEBM</div>
+            <div class="converter-name">WEBM to MP4</div>
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HOW TO
+========================================================= -->
+
+<section
+    id="howto"
+    class="howto"
+>
+
+    <div class="howto-inner">
+
+        <h2 class="section-title">
+            How to download
+        </h2>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <div class="step-number">1</div>
+
+                <h3>
+                    Copy a video link
+                </h3>
+
+                <p>
+                    Copy the URL of a video from a supported platform.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">2</div>
+
+                <h3>
+                    Paste the link
+                </h3>
+
+                <p>
+                    Paste the video URL into the NFN Downloader box.
+                    Processing starts automatically.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <div class="step-number">3</div>
+
+                <h3>
+                    Download
+                </h3>
+
+                <p>
+                    Select your preferred quality and download the available file.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="footer-logo">
+        NFN<span>.</span>
+    </div>
+
+    <div>
+        Free online media tools.
+    </div>
+
+
+    <div class="footer-links">
+
+        <a href="#">Terms</a>
+
+        <a href="#">Privacy</a>
+
+        <a href="#howto">How to</a>
+
+        <a href="#resources">Resources</a>
+
+    </div>
+
+</footer>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function openMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.add("active");
+
+    document
+        .getElementById("overlay")
+        .classList.add("active");
+
+}
+
+
+function closeMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.remove("active");
+
+    document
+        .getElementById("overlay")
+        .classList.remove("active");
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(function(){
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+
+/* =========================================================
+   CLEAR INPUT
+========================================================= */
+
+function clearInputField(){
+
+    const input =
+        document.getElementById("urlInput");
+
+    input.value = "";
+
+    input.focus();
+
+    document
+        .getElementById("clearInput")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   PLATFORM DETECTION
+========================================================= */
+
+function detectPlatform(url){
+
+    const value =
+        url.toLowerCase();
+
+    if(
+        value.includes("youtube.com") ||
+        value.includes("youtu.be")
+    ){
+        return "YouTube";
+    }
+
+    if(
+        value.includes("tiktok.com") ||
+        value.includes("vm.tiktok.com") ||
+        value.includes("vt.tiktok.com")
+    ){
+        return "TikTok";
+    }
+
+    if(
+        value.includes("instagram.com")
+    ){
+        return "Instagram";
+    }
+
+    if(
+        value.includes("facebook.com") ||
+        value.includes("fb.watch")
+    ){
+        return "Facebook";
+    }
+
+    if(
+        value.includes("twitter.com") ||
+        value.includes("x.com")
+    ){
+        return "X";
+    }
+
+    if(
+        value.includes("pinterest.com") ||
+        value.includes("pin.it")
+    ){
+        return "Pinterest";
+    }
+
+    if(
+        value.includes("reddit.com")
+    ){
+        return "Reddit";
+    }
+
+    if(
+        value.includes("vimeo.com")
+    ){
+        return "Vimeo";
+    }
+
+    if(
+        value.includes("dailymotion.com")
+    ){
+        return "Dailymotion";
+    }
+
+    return null;
+}
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let currentURL = "";
+
+let selectedFormat = "MP4";
+
+let selectedQuality = "1080";
+
+let processingTimer = null;
+
+
+/* =========================================================
+   VALID URL
+========================================================= */
+
+function isValidURL(value){
+
+    try{
+
+        const url =
+            new URL(value);
+
+        return(
+            url.protocol === "http:" ||
+            url.protocol === "https:"
+        );
+
+    }
+    catch(error){
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   START DOWNLOAD
+========================================================= */
+
+function startDownload(){
+
+    const input =
+        document.getElementById("urlInput");
+
+    const url =
+        input.value.trim();
+
+
+    if(!url){
+
+        return;
+
+    }
+
+
+    if(!isValidURL(url)){
+
+        showToast(
+            "Please enter a valid video link."
+        );
+
+        return;
+
+    }
+
+
+    const platform =
+        detectPlatform(url);
+
+
+    if(!platform){
+
+        showToast(
+            "Please enter a supported video link."
+        );
+
+        return;
+
+    }
+
+
+    currentURL = url;
+
+
+    document
+        .getElementById("result")
+        .classList.remove("active");
+
+
+    const processing =
+        document.getElementById("processing");
+
+    processing.classList.add("active");
+
+
+    const processingText =
+        document.getElementById("processingText");
+
+
+    const messages = [
+
+        "Detecting video...",
+
+        "Reading video information...",
+
+        "Checking available formats...",
+
+        "Preparing download options..."
+
+    ];
+
+
+    let index = 0;
+
+
+    processingText.textContent =
+        messages[0];
+
+
+    clearInterval(processingTimer);
+
+
+    processingTimer =
+        setInterval(function(){
+
+            index++;
+
+
+            if(index < messages.length){
+
+                processingText.textContent =
+                    messages[index];
+
+            }
+
+            else{
+
+                clearInterval(processingTimer);
+
+                finishProcessing();
+
+            }
+
+        },550);
+
+}
+
+
+/* =========================================================
+   FINISH PROCESSING
+========================================================= */
+
+function finishProcessing(){
+
+    document
+        .getElementById("processing")
+        .classList.remove("active");
+
+
+    showResult();
+
+}
+
+
+/* =========================================================
+   SHOW RESULT
+========================================================= */
+
+function showResult(){
+
+    const result =
+        document.getElementById("result");
+
+
+    const preview =
+        document.getElementById("videoPreview");
+
+
+    const placeholder =
+        document.getElementById("previewPlaceholder");
+
+
+    const title =
+        document.getElementById("videoTitle");
+
+
+    placeholder.style.display =
+        "flex";
+
+
+    preview.classList.remove(
+        "has-image"
+    );
+
+
+    title.textContent =
+        "Your video";
+
+
+    result.classList.add("active");
+
+
+    result.scrollIntoView({
+
+        behavior:"smooth",
+
+        block:"center"
+
+    });
+
+
+    loadPreview();
+
+}
+
+
+/* =========================================================
+   LOAD PREVIEW
+========================================================= */
+
+async function loadPreview(){
+
+    const loading =
+        document.getElementById("previewLoading");
+
+
+    loading.classList.add("active");
+
+
+    const API_ENDPOINT =
+        "/api/resolve";
+
+
+    try{
+
+        const response =
+            await fetch(API_ENDPOINT,{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+
+                    url:currentURL
+
+                })
+
+            });
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Backend unavailable"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(data.thumbnail){
+
+            const image =
+                document.getElementById(
+                    "videoThumbnail"
+                );
+
+
+            image.src =
+                data.thumbnail;
+
+
+            image.onload =
+                function(){
+
+                    document
+                        .getElementById(
+                            "previewPlaceholder"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "videoPreview"
+                        )
+                        .classList.add(
+                            "has-image"
+                        );
+
+                };
+
+        }
+
+
+        if(data.title){
+
+            document
+                .getElementById(
+                    "videoTitle"
+                )
+                .textContent =
+                data.title;
+
+        }
+
+
+        loading.classList.remove("active");
+
+    }
+    catch(error){
+
+        loading.classList.remove("active");
+
+        document
+            .getElementById(
+                "previewPlaceholder"
+            )
+            .style.display =
+            "flex";
+
+    }
+
+}
+
+
+/* =========================================================
+   QUALITY DROPDOWN
+========================================================= */
+
+function toggleQuality(){
+
+    const menu =
+        document.getElementById(
+            "qualityMenu"
+        );
+
+    const button =
+        document.getElementById(
+            "qualityButton"
+        );
+
+
+    menu.classList.toggle("active");
+
+    button.classList.toggle("open");
+
+}
+
+
+function selectQuality(format,quality){
+
+    selectedFormat =
+        format;
+
+    selectedQuality =
+        quality;
+
+
+    document
+        .getElementById(
+            "selectedFormat"
+        )
+        .innerHTML =
+        format +
+        "&nbsp;&nbsp;" +
+        quality;
+
+
+    document
+        .getElementById(
+            "qualityMenu"
+        )
+        .classList.remove(
+            "active"
+        );
+
+
+    document
+        .getElementById(
+            "qualityButton"
+        )
+        .classList.remove(
+            "open"
+        );
+
+}
+
+
+/* =========================================================
+   ACTUAL DOWNLOAD REQUEST
+========================================================= */
+
+async function downloadSelected(){
+
+    if(!currentURL){
+
+        showToast(
+            "Paste a video link first."
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "downloadButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "downloadStatus"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Loading...";
+
+
+    status.textContent =
+        "Preparing your download...";
+
+
+    status.classList.add(
+        "active"
+    );
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/download",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        url:currentURL,
+
+                        format:selectedFormat,
+
+                        quality:selectedQuality
+
+                    })
+
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Download service unavailable"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !data.downloadUrl
+        ){
+
+            throw new Error(
+                "No download URL"
+            );
+
+        }
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.href =
+            data.downloadUrl;
+
+
+        link.target =
+            "_blank";
+
+
+        link.rel =
+            "noopener";
+
+
+        document.body.appendChild(link);
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        status.textContent =
+            "Your download has started!";
+
+
+    }
+    catch(error){
+
+        status.textContent =
+            "Download service is not connected yet.";
+
+
+        showToast(
+            "Connect your download backend/API first."
+        );
+
+    }
+
+
+    button.disabled =
+        false;
+
+
+    button.textContent =
+        "Download";
+
+}
+
+
+/* =========================================================
+   INPUT + CLEAR BUTTON
+========================================================= */
+
+const urlInput =
+    document.getElementById(
+        "urlInput"
+    );
+
+
+const clearInputButton =
+    document.getElementById(
+        "clearInput"
+    );
+
+
+let pasteTimer;
+
+
+urlInput.addEventListener(
+    "input",
+    function(){
+
+        const value =
+            this.value.trim();
+
+
+        /* Show X only when there is text */
+
+        if(value){
+
+            clearInputButton
+                .classList.add("show");
+
+        }
+        else{
+
+            clearInputButton
+                .classList.remove("show");
+
+        }
+
+
+        clearTimeout(
+            pasteTimer
+        );
+
+
+        /*
+           Automatically process supported
+           links after they are pasted.
+        */
+
+        if(
+            isValidURL(value) &&
+            detectPlatform(value)
+        ){
+
+            pasteTimer =
+                setTimeout(
+                    function(){
+
+                        startDownload();
+
+                    },
+                    250
+                );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+urlInput.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            event.preventDefault();
+
+            startDownload();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CLOSE QUALITY MENU WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const wrap =
+            document.querySelector(
+                ".quality-wrap"
+            );
+
+
+        if(
+            wrap &&
+            !wrap.contains(event.target)
+        ){
+
+            document
+                .getElementById(
+                    "qualityMenu"
+                )
+                .classList.remove(
+                    "active"
+                );
+
+
+            document
+                .getElementById(
+                    "qualityButton"
+                )
+                .classList.remove(
+                    "open"
+                );
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
